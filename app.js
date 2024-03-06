@@ -34,13 +34,13 @@ const users = [];
 // Usually is more involved with frameworks like Laravel which Davis prefers
 // You're not using Laravel, you're in some BS Python backend lol
 app.use(bodyparser.json()); // Use middleware to interpret JSON
-//app.use(express.static(__dirname + '/front-end/build')); // Express will only read from front-end/build
+app.use(express.static(__dirname + '/front-end/build')); // Express will only read from front-end/build
 
 // Single Page App (SPA) only serves one file, terrible for Foogle indexing but fine for captsone
 // GET request with express app
 app.get('*', (req, res) => { // App will accept all paths (ie /login /register /whatever) and run the following code
     // Result sends SPA file because of front-end routing
-    res.status(200).send({ message: 'This is for development testing ' }); // Path middleware to make life easier
+    res.sendFile(path.join(__dirname + '/front-end/build/index.html')); // Path middleware to make life easier
 });
 
 // POST requests with express app
