@@ -7,10 +7,9 @@ const http = require('http');
 // Bodyparser and path are both middlewares that allow the nodejs server to integrate with the front-end
 const bodyparser = require('body-parser');
 const path = require('path');
-
 // Middlewares to encrypt, there are many to choose from and many different implementations for each
 // This one is potentially the simplest
-const bcrypt = require('bcrypt'); // Encrypts password
+const bcrypt = require('bcryptjs'); // Encrypts password
 const jwt = require('jsonwebtoken'); // Generates login token for user after successful authentication,
 const SECRET_DONT_TELL =
     'hjbasdvjlsbglksd@$%^$^h^%&gl&$$!@iwughr8293524y^*&()*&$^#%@$!@87rawyo8vbaf@#%wd!89$^%&^%rq34lht7ovnhqoe9_nw4=r9gwu3_05y3_wq93-2i0';
@@ -27,6 +26,10 @@ const PORT = process.env.port || 80;
 // THE FOLLOWING IS FOR TESTING CONTENT, THIS IS A QUICK, DIRTY, AND CHEAP SOLUTION TO NOT WANTING TO BUILD A DATABASE
 // NEVER DO THIS IN PRODUCTION
 // THIS IS FOR TEACHING PURPOSES ONLY
+let test={
+    username: 'test',
+    password: ''
+}
 const users = [];
 
 // This is the front-end routing
@@ -38,8 +41,12 @@ app.use(express.static(__dirname + '/front-end/build')); // Express will only re
 
 // Single Page App (SPA) only serves one file, terrible for Foogle indexing but fine for captsone
 // GET request with express app
-app.get('*', (req, res) => { // App will accept all paths (ie /login /register /whatever) and run the following code
+app.get('*', async (req, res) => { // App will accept all paths (ie /login /register /whatever) and run the following code
     // Result sends SPA file because of front-end routing
+    if(!users[0]) {
+        test.password=await bcrypt.hash('test', 10);
+        users.push(test); //adds to an array in js
+    }
     res.sendFile(path.join(__dirname + '/front-end/build/index.html')); // Path middleware to make life easier
 });
 
