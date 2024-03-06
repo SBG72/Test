@@ -146,7 +146,7 @@ app.post('/api/get-user', async (req, res) => {
 
     if(token) {
         let decode = jwt.verify(token, SECRET_DONT_TELL); // Compare token with secret
-        user = users.filter((u) => u.username.toLowerCase() === token.username.toLowerCase())[0]; // Grab user from encoded data
+        user = users.filter((u) => u.username.toLowerCase() === decode.username.toLowerCase())[0]; // Grab user from encoded data
     }
 
     if(!user && !token) return res.status(500)
